@@ -1,0 +1,15 @@
+# Supabase CLI 설정 (원격 프로젝트: ivyhmwpbpkfvbwnckqgv)
+project_id = "ivyhmwpbpkfvbwnckqgv"
+
+# 모든 함수는 코드 안에서 auth.getUser()로 직접 인증한다 (신규 비대칭 JWT 키 호환).
+[functions.signup]
+verify_jwt = false
+
+[functions.chat]
+verify_jwt = false
+
+[functions.game]
+verify_jwt = false
+
+[functions.payments]
+verify_jwt = false
