@@ -2,6 +2,8 @@
 
 브라우저에서 즐기는 3D 전통 윷놀이. **사람 vs 사람**, **사람 vs PC** 대전, 대기실·방 채팅(비속어 필터), 토스페이먼츠 **테스트 결제**로 포인트 충전, 아이템 구매를 지원합니다.
 
+**▶ 게임 하러 가기: https://jacksju0.github.io/game_proj_test/**
+
 - 프론트엔드: React + Vite + three.js(@react-three/fiber) → **GitHub Pages**
 - 백엔드: **Supabase** (Postgres + RLS, Realtime, Edge Functions)
 - 결제: **토스페이먼츠** 결제창 SDK v2 (테스트 모드)
