@@ -1,6 +1,6 @@
-// 채팅 전송: 비속어가 탐지되면 원문 대신 안내 문구를 저장·전파한다.
+// 채팅 전송: Gemini로 비속어를 판단하고, 탐지되면 원문 대신 안내 문구를 저장·전파한다.
 import { admin, HttpError, requireUser, serve } from "../_shared/common.ts";
-import { hasProfanity, PROFANITY_NOTICE } from "../_shared/profanity.ts";
+import { detectProfanity, PROFANITY_NOTICE } from "../_shared/profanity.ts";
 
 serve(async (req, body) => {
   const db = admin();
@@ -18,7 +18,7 @@ serve(async (req, body) => {
     if (!member) throw new HttpError(403, "이 방의 참가자만 채팅할 수 있습니다.");
   }
 
-  const filtered = hasProfanity(content);
+  const { profane: filtered, source } = await detectProfanity(content);
   const { error } = await db.from("chat_messages").insert({
     channel: roomId ? `room:${roomId}` : "lobby",
     room_id: roomId,
@@ -29,5 +29,5 @@ serve(async (req, body) => {
     filtered,
   });
   if (error) throw new HttpError(500, error.message);
-  return { ok: true, filtered };
+  return { ok: true, filtered, source };
 });

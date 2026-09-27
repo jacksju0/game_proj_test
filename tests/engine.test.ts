@@ -21,7 +21,8 @@ assert(JSON.stringify(computePath(P(15,24), "backdo")!.path) === "[24]", "backdo
 let wins = [0,0], turns = 0, captures = 0;
 for (let g = 0; g < 2000; g++) {
   const s = newGame("pvc", [pc(0), pc(1)], rng);
-  runAi(s, rng);
+  // runAi는 한 번에 최대 200 동작만 진행하므로 PC끼리의 전체 게임은 반복 호출
+  for (let k = 0; k < 50 && s.phase !== "finished"; k++) runAi(s, rng);
   assert(s.phase === "finished", "game did not finish " + g);
   assert(s.pieces.filter(p => p.seat === s.winner).every(p => p.pos === GOAL), "winner all goal");
   wins[s.winner!]++; turns += s.turnNo;
