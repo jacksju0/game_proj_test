@@ -40,7 +40,7 @@ supabase/
   migrations/              DB 스키마 (profiles, rooms, room_players, chat_messages, payments, RPC)
   functions/
     _shared/yut.ts         윷놀이 엔진 (서버·클라이언트 공용, 서버가 판정 권한을 가짐)
-    _shared/profanity.ts   비속어 탐지기
+    _shared/profanity.ts   비속어 탐지기 (Gemini gemini-3.5-flash-lite, 실패 시 금칙어 목록)
     signup/                회원가입 (이름·아이디·비밀번호)
     game/                  방 생성/참가/나가기/시작, 던지기·이동·아이템, PC AI
     chat/                  채팅 전송 + 비속어 필터 ("비속어는 사용 할 수 없습니다.")
@@ -64,6 +64,7 @@ tests/                     엔진 시뮬레이션·비속어 필터 테스트 (n
 | --- | --- | --- |
 | Secret | `SUPABASE_ACCESS_TOKEN` | Supabase 계정 액세스 토큰 |
 | Secret | `SUPABASE_DB_PASSWORD` | DB 비밀번호 (마이그레이션용, 선택) |
+| Supabase Secret | `GEMINI_API_KEY` | 채팅 비속어 판단용 Gemini API 키 (없으면 금칙어 목록으로 판단) |
 | Variable | `VITE_TOSS_CLIENT_KEY` | 토스페이먼츠 **테스트 클라이언트 키** (`test_ck_…`, 공개값) |
 
 ### 토스페이먼츠 테스트 키 설정
