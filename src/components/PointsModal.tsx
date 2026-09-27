@@ -8,8 +8,15 @@ import type { Payment, Profile } from "../lib/types";
 
 const PRESETS = [1000, 3000, 5000, 10000, 30000];
 
+type PayMethod = "CARD" | "TRANSFER";
+const METHODS: { id: PayMethod; label: string; desc: string }[] = [
+  { id: "CARD", label: "💳 카드 · 간편결제", desc: "신용·체크카드, 카카오페이 등" },
+  { id: "TRANSFER", label: "🏦 퀵계좌이체", desc: "은행 계좌에서 바로 이체" },
+];
+
 export function PointsModal({ profile, onClose }: { profile: Profile; onClose: () => void }) {
   const [amount, setAmount] = useState(5000);
+  const [method, setMethod] = useState<PayMethod>("CARD");
   const [busy, setBusy] = useState(false);
   const [history, setHistory] = useState<Payment[]>([]);
 
@@ -26,15 +33,23 @@ export function PointsModal({ profile, onClose }: { profile: Profile; onClose: (
       const tossPayments = await loadTossPayments(TOSS_CLIENT_KEY);
       const payment = tossPayments.payment({ customerKey: order.customerKey });
       const base = window.location.origin + window.location.pathname;
-      await payment.requestPayment({
-        method: "CARD",
+      const common = {
         amount: { currency: "KRW", value: order.amount },
         orderId: order.orderId,
         orderName: order.orderName,
         customerName: profile.name,
         successUrl: `${base}?pay=success`,
         failUrl: `${base}?pay=fail`,
-      });
+      };
+      if (method === "TRANSFER") {
+        await payment.requestPayment({
+          ...common,
+          method: "TRANSFER",
+          transfer: { cashReceipt: { type: "미발행" }, useEscrow: false },
+        });
+      } else {
+        await payment.requestPayment({ ...common, method: "CARD" });
+      }
     } catch (e) {
       const err = e as { code?: string; message?: string };
       if (err.code !== "USER_CANCEL") toast(err.message ?? "결제를 시작하지 못했습니다.", "error");
@@ -54,6 +69,15 @@ export function PointsModal({ profile, onClose }: { profile: Profile; onClose: (
         <span>직접 입력 (원)</span>
         <input type="number" min={100} step={100} value={amount} onChange={(e) => setAmount(Math.floor(Number(e.target.value)))} />
       </label>
+      <div className="field"><span>결제 수단</span></div>
+      <div className="method-grid">
+        {METHODS.map((m) => (
+          <button key={m.id} type="button" className={`method ${method === m.id ? "active" : ""}`} onClick={() => setMethod(m.id)}>
+            <b>{m.label}</b>
+            <span className="muted small">{m.desc}</span>
+          </button>
+        ))}
+      </div>
       <div className="pay-summary">
         <span>충전 포인트</span><b>{(amount || 0).toLocaleString()} P</b>
       </div>

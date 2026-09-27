@@ -195,6 +195,12 @@ input:focus { border-color: var(--gold); }
 .modal-head h3 { margin: 0; font-family: "Black Han Sans", sans-serif; font-weight: 400; font-size: 1.35rem; }
 .modal-body { padding: 14px 18px 18px; }
 .preset-grid { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+.method-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: -4px 0 4px; }
+.method {
+  display: grid; gap: 2px; text-align: left; padding: 10px 12px; border-radius: 12px; cursor: pointer;
+  border: 1.5px solid var(--line); background: #fffaf0; color: var(--ink);
+}
+.method.active { border-color: var(--red); background: #fdeae6; box-shadow: 0 0 0 2px rgba(200,53,43,.15); }
 .pay-summary { display: flex; justify-content: space-between; align-items: center; background: var(--panel2); padding: 12px 14px; border-radius: 12px; margin: 10px 0 14px; }
 .pay-summary b { font-size: 1.2rem; }
 .history { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; max-height: 200px; overflow: auto; }
